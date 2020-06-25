@@ -1,11 +1,10 @@
 /* eslint no-restricted-globals: 'off' */
 
-// Iteration 1: Ordering by year - Order by year, ascending (in growing order)
-// NB: use sort method, access year in object using movies[i].year
+// ITERATION 1: Ordering by year - Order by year, ascending
 
 function orderByYear(arrOfMovies) {
   const chronoOrderedMovies = arrOfMovies.slice();
-  chronoOrderedMovies.sort(function(a, b) {
+  chronoOrderedMovies.sort(function (a, b) {
     const yearA = a.year;
     const yearB = b.year;
 
@@ -15,28 +14,16 @@ function orderByYear(arrOfMovies) {
     } else if (a.year > b.year) {
       return 1;
     } else if (a.year === b.year) {
-      //return chronoOrderedMovies.sort(); //Can't use sort() 'normally' for direct string comparison because I have set it up as number comparison above (?)
       return a.title.localeCompare(b.title);
-    } //use localeCompare() for strings instead. localeCompare returns a NEG num (usually -1,  but careful! not so in all browsers) if 'a' occurs before 'b' string, and POS value if b string occurs before A
+    }
   });
   return chronoOrderedMovies;
 }
-//JAN soln:
-//return a.title.localeCompare(b.title);
 
-// ITERATION 2. Steven Spielberg. The best? - How many drama movies did STEVEN SPIELBERG direct
-//Create a howManyMovies() function that receives an array as a parameter and filter 👀 the array
-// to return director Steven Spielberg's drama movies Only
-
-//Step 1: use filter method
-//Step 2: return the number of items in that array (i.e. array.length)
-//Step 3: if array empty return 0; else if only drama movies return 1
-//if only spielberg movies return 2 && return 4 ??? don't understand what Jasmine instructions mean here...
-
-//LOGIC CHAIN= movies ARRAY > film OBJECTS > director property (STRING) & genre property (ARRAY)
+// ITERATION 2. How many drama movies did STEVEN SPIELBERG direct?
 
 function howManyMovies(arr) {
-  const spielbergMovies = arr.filter(function(movie) {
+  const spielbergMovies = arr.filter(function (movie) {
     return (
       movie.director === "Steven Spielberg" && movie.genre.includes("Drama")
     );
@@ -44,44 +31,23 @@ function howManyMovies(arr) {
   return spielbergMovies.length;
 }
 
-// Iteration 3: Alphabetic Order by title (only of the first 20 titles)
-// Create a orderAlphabetically() function, that receives an array and returns
-//  an array of first 20 titles, alphabetically ordered. Return only the title of
-//  each movie, and if the array you receive has less than 20 movies, return all of them.
-
-//LOGIC CHAIN= movies ARRAY > film OBJECTS > director property (STRING) & genre property (ARRAY)
+// ITERATION 3: Alphabetic Order by title (only of the first 20 titles)
 
 function orderAlphabetically(movieArray) {
-  const alphaOrder = movieArray.map(function(movie) {
+  const movieTitles = movieArray.map(function (movie) {
     return movie.title;
   });
-  let top20 = alphaOrder.sort().slice(0, 20);
+  let top20 = movieTitles.sort().slice(0, 20);
   return top20;
 }
 
-// Iteration 4: All rates average - Get the average of all rates with 2 decimals
-//LOGIC CHAIN= movies ARRAY > film OBJECTS > director property (STRING) & genre property (ARRAY)
-//Use .reduce()
+// ITERATION 4: Get the average of all rates with 2 decimals
 
-//  function ratesAverage(moviesArr) {
-//   if (moviesArr.length === 0) {
-//     return 0;
-//   } else {
-//   const totalRating = moviesArr.reduce(function  (sumRates, filmRate) {
-//     if (!filmRate.rate) {filmRate.rate = 0};
-//     return sumRates + (filmRate.rate);
-//     }, 0);
-//     const avgRating = Math.round(((totalRating/movies.length)*100)/100);
-//     return avgRating;
-//   }
-// }
-
-//REFACTORING/Attempt after discussion in class wk2d1
 function ratesAverage(moviesArr) {
   if (moviesArr.length === 0) {
     return 0;
   } else {
-    const totalRating = moviesArr.reduce(function(sumRates, filmRate) {
+    const totalRating = moviesArr.reduce(function (sumRates, filmRate) {
       if (typeof filmRate.rate !== "number") {
         filmRate.rate = 0;
       }
@@ -92,21 +58,20 @@ function ratesAverage(moviesArr) {
     return parseFloat(avgRating.toFixed(2));
   }
 }
-//!!!use parsefloat avgRating.toFixed(2) because toFixed changes number to string
 
-// Iteration 5: Drama movies - Get the average of Drama Movies
+// ITERATION 5: Get the average of Drama Movies
 
 function dramaMoviesRate(moviesArr) {
   if (moviesArr.length === 0) {
     return 0;
   } else {
-    const dramaMovies = moviesArr.filter(function(movie) {
+    const dramaMovies = moviesArr.filter(function (movie) {
       return movie.genre.includes("Drama");
     });
     if (dramaMovies.length === 0) {
       return 0;
     } else {
-      const totalRating = dramaMovies.reduce(function(sumRates, filmRate) {
+      const totalRating = dramaMovies.reduce(function (sumRates, filmRate) {
         return sumRates + filmRate.rate;
       }, 0);
 
@@ -118,24 +83,33 @@ function dramaMoviesRate(moviesArr) {
   }
 }
 
-// Iteration 6: Time Format - Turn duration of the movies from hours to minutes
-//Create a turnHoursToMinutes() function that receives an array as parameter,
-// and with some magic implemented by you - replaces the duration info of each of the
-// movies for its equivalent in minutes. ie 1 hour becomes 60
+// ITERATION 6: Time Format - Turn duration of the movies from hours to minutes
 
-//1. iterate through the array of movies using forEach
-//2. target the movie.duration key
-//3. if 'h' occurs after then take the number at index 0, make it a number and multiply by 60
-//4. if value includes 'min' string then splice string between h and last character and make number
+function turnHoursToMinutes(moviesArr) {
+  const newMoviesArr = JSON.parse(JSON.stringify(moviesArr));
 
-//THIS APPROACH DOESN'T WORK BECAUSE IT ONLY RETURNS THE FIRST VALUE AND THEN STOPS THE LOOP
-//function turnHoursToMinutes(moviesArr) {
-//   let hoursToMins = '';
-//   let strToNumMins = '';
-//   moviesArr.forEach(function(movie) {
-//     hoursToMins = Number(movie.duration.charAt(0));
-//   }); return hoursToMins;
-//   }
+  newMoviesArr.map((movie) => {
+    let strToNumMins = 0;
+    let hoursToMins = 0;
 
-// // BONUS Iteration: Best yearly rate average - Best yearly rate average
-// */
+    if (movie.duration.includes("h")) {
+      hoursToMins = Number(movie.duration.charAt(0)) * 60;
+      //OR if a movie length is > 9hrs and therefore takes two indices
+      //Number(movie.duration.slice(0, movie.duration.indexOf('h'))) * 60;
+    }
+    if (movie.duration.includes("min")) {
+      strToNumMins = Number(
+        movie.duration.slice(
+          movie.duration.indexOf(" ") + 1,
+          movie.duration.indexOf("m")
+        )
+      );
+    }
+
+    movie.duration = hoursToMins + strToNumMins;
+  });
+
+  return newMoviesArr;
+}
+
+// BONUS ITERATION: Which year had the highest average rating for all movies
