@@ -113,3 +113,50 @@ function turnHoursToMinutes(moviesArr) {
 }
 
 // BONUS ITERATION: Which year had the highest average rating for all movies
+
+const bestYearAvg = (ar) => {
+  if (!ar.length) return null;
+  const yearsWithoutDupes = [...new Set(ar.map((movie) => movie.year))];
+  const averageRatingsPerYear = yearsWithoutDupes.map((year) => ({
+    year,
+    rate: ratesAverage(ar.filter((movie) => movie.year === year)),
+  }));
+  const best = averageRatingsPerYear.sort((a, b) =>
+    b.rate - a.rate === 0 ? a.year - b.year : b.rate - a.rate
+  )[0];
+
+  return `The best year was ${best.year} with an average rate of ${best.rate}`;
+};
+
+function bestYearAvg2(movies) {
+  if (!movies.length) return null;
+
+  const best = movies.reduce(
+    function (best, movie) {
+      let average = ratesAverage(
+        movies.filter(function (m) {
+          return m.year === movie.year;
+        })
+      );
+      // console.log(movie.year, average, best.rate);
+
+      if (
+        average > best.rate ||
+        (average === best.rate && movie.year < best.year)
+      ) {
+        best.year = movie.year;
+        best.rate = average;
+        // console.log(best);
+      }
+      return best;
+    },
+    {
+      year: null,
+      rate: null,
+    }
+  );
+
+  return `The best year was ${best.year} with an average rate of ${best.rate}`;
+}
+
+console.log(bestYearAvg2(movies));
